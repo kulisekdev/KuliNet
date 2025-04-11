@@ -7,8 +7,17 @@ import discord
 with open("configuration.json", "r") as token_json:
     load_token = json.load(token_json)
     token = load_token["Token"]
+    prefix = load_token["command_prefix"]
 
 # Defining bot
-bot = commands.Bot(command_prefix="")
+bot = commands.Bot(command_prefix=prefix)
 
-@bot.slash
+@bot.command()
+async def join(ctx):
+    channel = ctx.author.voice.channel
+    joined = discord.Embed(
+        title=f"Joined to {channel.name}",
+        description="The bot successfully joined the voice channel.",
+        timestamp=discord.utils.utcnow(),
+        color=discord.Color.green()
+    )
