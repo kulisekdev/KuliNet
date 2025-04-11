@@ -2,7 +2,6 @@
 {   
     "comment1": "enter your bot token below and the thing will take it. make sure to turn off the bot first.",
     "Token": "token here",
-    
     "comment2": "prefix should be like ! or ? or anything.",
     "command_prefix": "prefix here"
 }
