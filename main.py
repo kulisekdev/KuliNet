@@ -21,3 +21,6 @@ async def join(ctx):
         timestamp=discord.utils.utcnow(),
         color=discord.Color.green()
     )
+    if ctx.author.voice:
+        await channel.connect()
+        await ctx.send(embed=joined)
