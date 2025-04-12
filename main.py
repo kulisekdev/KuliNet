@@ -28,10 +28,23 @@ bot = commands.Bot(command_prefix=prefix, intents=intents)
 
 @bot.command()
 async def join(ctx):
-    channel = ctx.author.voice.channel
+    Error = discord.Embed(
+        title=f"Error!",
+        description="The bot doesn't know where to join make sure to join a channel first before execution of ```!join```",
+        timestamp=discord.utils.utcnow(),
+        color=discord.Color.red()
+    )
+    Error.set_author(
+        name="KuliNet",
+        icon_url=bot.user.avatar.url
+    )
 
+    if ctx.author.voice is None or ctx.author.voice.channel is None:
+       await ctx.send(embed=Error)
+       return
+    
     joined = discord.Embed(
-        title=f"Joined to **{channel.name}**",
+        title=f"Joined to **{ctx.author.voice.channel.name}**",
         description="The bot successfully joined the voice channel.",
         timestamp=discord.utils.utcnow(),
         color=discord.Color.green()
@@ -40,28 +53,15 @@ async def join(ctx):
         name="KuliNet",
         icon_url=bot.user.avatar.url
     )
-    Error = discord.Embed(
-        title=f"Error!",
-        description="The bot doesn't know where to join make sure to join a channel first before execution of ```!join```",
-        timestamp=discord.utils.utcnow(),
-        color=discord.Color.green()
-    )
-    Error.set_author(
-        name="KuliNet",
-        icon_url=bot.user.avatar.url
-    )
 
-    if ctx.author.voice is None:
-      await ctx.send(embed=Error)
-      return   
-    
-    try:
-    
-      await channel.connect()
+    if ctx.author.voice is None or ctx.author.voice.channel is None:
+       await ctx.send(embed=Error)
+       return
+ 
+    if ctx.author.voice:  
       await ctx.send(embed=joined)
-    except discord.ext.commands.errors.CommandInvokeError as e:
-       await ctx.send(f"Error: {e}")
-
+      await ctx.author.voice.channel.connect()
+ 
 
 
 bot.run(token=temptoken)
