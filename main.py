@@ -1,8 +1,11 @@
+
 # Imports
 import json
 from discord.ext import commands
 import discord
 import os
+import yt_dlp
+from discord import FFmpegPCMAudio
 
 #testing...
 from dotenv import load_dotenv
@@ -41,8 +44,8 @@ async def join(ctx):
     )
 
     if ctx.author.voice is None or ctx.author.voice.channel is None:
-       await ctx.send(embed=Error)
-       return
+        await ctx.send(embed=Error)
+        return
     
     joined = discord.Embed(
         title=f"Joined to **{ctx.author.voice.channel.name}**",
@@ -67,7 +70,26 @@ async def join(ctx):
 async def play(ctx,url):
     if isinstance(url, str):
        Audio_Options = {
-          "outtmpl": "music.%(ext)s"
+          "outtmpl": "music.%(ext)s",
+          "format": "bestaudio"
        }
+       with yt_dlp.YoutubeDL(Audio_Options) as Downloader:
+        info_dict = Downloader.extract_info(url, download=True)
+        title = info_dict.get("title")
+        thumbnail = info_dict.get("thumbnail")
+        author = info_dict.get("uploader")
 
+       music = discord.Embed(
+          title="Now playing...",
+          description=f"User {ctx.author.mention} has requested to play **{title}** Author: {author}",
+          timestamp=discord.utils.utcnow(),
+       )
+
+       music.set_author(
+          name="KuliNet - Music Function",
+          icon_url=bot.user.avatar.url
+       )
+       music.set_thumbnail(
+          url=thumbnail
+       )
 bot.run(token=temptoken)
