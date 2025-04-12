@@ -29,6 +29,7 @@ bot = commands.Bot(command_prefix=prefix, intents=intents)
 @bot.command()
 async def join(ctx):
     channel = ctx.author.voice.channel
+
     joined = discord.Embed(
         title=f"Joined to **{channel.name}**",
         description="The bot successfully joined the voice channel.",
@@ -49,12 +50,17 @@ async def join(ctx):
         name="KuliNet",
         icon_url=bot.user.avatar.url
     )
-    if ctx.author.voice.channel is None:
-        await ctx.send(embed=Error)
-    else:
-        await channel.connect()
-        await ctx.send(embed=joined)
 
+    if ctx.author.voice is None:
+      await ctx.send(embed=Error)
+      return   
+    
+    try:
+    
+      await channel.connect()
+      await ctx.send(embed=joined)
+    except discord.ext.commands.errors.CommandInvokeError as e:
+       await ctx.send(f"Error: {e}")
 
 
 
