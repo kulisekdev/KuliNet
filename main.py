@@ -26,6 +26,7 @@ intents.members = True
 
 bot = commands.Bot(command_prefix=prefix, intents=intents)
 
+
 @bot.command()
 async def join(ctx):
     Error = discord.Embed(
@@ -62,6 +63,11 @@ async def join(ctx):
       await ctx.send(embed=joined)
       await ctx.author.voice.channel.connect()
  
-
+@bot.command()
+async def play(ctx,url):
+    if isinstance(url, str):
+       Audio_Options = {
+          "outtmpl": "music.%(ext)s"
+       }
 
 bot.run(token=temptoken)
