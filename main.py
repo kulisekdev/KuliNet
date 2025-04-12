@@ -68,6 +68,21 @@ async def join(ctx):
  
 @bot.command()
 async def play(ctx,url):
+    Error = discord.Embed(
+        title=f"Error!",
+        description="The bot doesn't know where to join make sure to join a channel first before execution of ```!join```",
+        timestamp=discord.utils.utcnow(),
+        color=discord.Color.red()
+    )
+    Error.set_author(
+        name="KuliNet",
+        icon_url=bot.user.avatar.url
+    )
+
+    if ctx.author.voice is None or ctx.author.voice.channel is None:
+        return await ctx.send(embed=Error)
+       
+    
     if isinstance(url, str):
        Audio_Options = {
           "outtmpl": "music.%(ext)s",
@@ -81,7 +96,7 @@ async def play(ctx,url):
 
        music = discord.Embed(
           title="Now playing...",
-          description=f"User {ctx.author.mention} has requested to play **{title}** Author: {author}",
+          description=f"User {ctx.author.mention} \n has requested to play **{title}** \n Author: **{author}**",
           timestamp=discord.utils.utcnow(),
        )
 
@@ -92,4 +107,10 @@ async def play(ctx,url):
        music.set_thumbnail(
           url=thumbnail
        )
+       await ctx.send(embed=music)
+       await ctx.voice_client.play(FFmpegPCMAudio("music.mp3"))
+
+
+
+
 bot.run(token=temptoken)
