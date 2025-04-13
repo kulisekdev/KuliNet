@@ -70,7 +70,7 @@ async def join(ctx):
 async def play(ctx,url):
     Error = discord.Embed(
         title=f"Error!",
-        description="The bot doesn't know where to join make sure to join a channel first before execution of ```!join```",
+        description="I'm not in a voice channel. use ```!join```",
         timestamp=discord.utils.utcnow(),
         color=discord.Color.red()
     )
@@ -79,7 +79,7 @@ async def play(ctx,url):
         icon_url=bot.user.avatar.url
     )
 
-    if ctx.author.voice is None or ctx.author.voice.channel is None:
+    if not ctx.voice_client:
         return await ctx.send(embed=Error)
        
     
@@ -108,7 +108,7 @@ async def play(ctx,url):
           url=thumbnail
        )
        await ctx.send(embed=music)
-       await ctx.voice_client.play(FFmpegPCMAudio("music.mp3"))
+       await ctx.voice_client.play(FFmpegPCMAudio("music.webm"))
 
 
 
