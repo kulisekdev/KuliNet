@@ -128,7 +128,6 @@ async def leave(ctx):
 @commands.has_permissions(kick_members=True)
 @bot.command()
 async def kick(ctx, user:discord.Member, reason):
-    print("Init.")
     if user == bot:
        return await ctx.send("Can't kick a bot!")
     if user == bot.user:
@@ -159,7 +158,8 @@ async def kickerror(ctx,error):
         icon_url=bot.user.avatar.url
     )
     await ctx.send(embed=Error)
-      
+   else:
+      await ctx.send(f"{error}")
    
 
     
