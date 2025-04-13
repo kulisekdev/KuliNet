@@ -1,6 +1,8 @@
 
 # Imports
+import cmd
 import json
+from turtle import left
 from discord.ext import commands
 import discord
 import os
@@ -109,6 +111,22 @@ async def play(ctx,url):
        )
        await ctx.send(embed=music)
        await ctx.voice_client.play(FFmpegPCMAudio("music.webm"))
+
+@bot.command()
+async def leave(ctx):
+    left = discord.Embed(
+        title=f"Left te channel **{ctx.author.voice.channel.name}**",
+        description="The bot successfully left the voice channel.",
+        timestamp=discord.utils.utcnow(),
+        color=discord.Color.red()
+    )
+    left.set_author(
+        name="KuliNet",
+        icon_url=bot.user.avatar.url
+    )
+    await ctx.send(embed=left)
+    await ctx.voice.channel.disconnect()
+    
 
 
 
