@@ -131,39 +131,59 @@ async def kick(ctx, user:discord.Member, reason):
     if user == bot:
        return await ctx.send("Can't kick a bot!")
     if user == bot.user:
-       return ctx.send("Can't kick KuliNet using this command!")
+       return await ctx.send("Can't kick KuliNet using this command!")
     
-    if reason is None:
-        print("Reason is none.")
-        await user.kick(reason="No reason specified.")
-        await ctx.reply(f"Successfully kicked {user} without specifing a reason")
-    else:
-        print("Reason is a str")
-        await user.kick(reason=reason)
-        await ctx.reply(f"Successfully kicked {user} for {reason}")       
+    await user.kick(reason=reason)
+    await ctx.reply(f"Successfully kicked {user} for {reason}")       
        
 
 
 @kick.error
-async def kickerror(ctx,error):
-   if isinstance(error, commands.MissingPermissions):
-    Error = discord.Embed(
+async def kick_error(ctx,error):
+     if isinstance(error, commands.MissingPermissions):
+        Error = discord.Embed(
         title=f"Error!",
         description="You dont have permission to use this command!",
         timestamp=discord.utils.utcnow(),
         color=discord.Color.red()
-    )
-    Error.set_author(
+        )
+        Error.set_author(
         name="KuliNet",
         icon_url=bot.user.avatar.url
-    )
-    await ctx.send(embed=Error)
-   else:
-      await ctx.send(f"{error}")
+        )
+        await ctx.send(embed=Error)
+     else:
+        await ctx.send(f"{error}")
    
 
-    
 
+@commands.has_permissions(ban_members=True)
+@bot.command()
+async def ban(ctx, user:discord.Member, reason):
+    if user == bot:
+       return await ctx.send("Can't ban a bot!")
+    if user == bot.user:
+       return await ctx.send("Can't ban KuliNet using this command!")
+    
+    await user.kick(reason=reason)
+    await ctx.reply(f"Successfully banned {user} for {reason}")    
+    
+@kick.error
+async def ban_error(ctx,error):
+     if isinstance(error, commands.MissingPermissions):
+        Error = discord.Embed(
+        title=f"Error!",
+        description="You dont have permission to use this command!",
+        timestamp=discord.utils.utcnow(),
+        color=discord.Color.red()
+        )
+        Error.set_author(
+        name="KuliNet",
+        icon_url=bot.user.avatar.url
+        )
+        await ctx.send(embed=Error)
+     else:
+        await ctx.send(f"{error}")
 
 
 bot.run(token=temptoken)
