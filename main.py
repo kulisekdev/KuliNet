@@ -126,7 +126,7 @@ async def leave(ctx):
     )
     await ctx.send(embed=left)
     await ctx.voice_client.disconnect()
-    
+      
 
 
 
