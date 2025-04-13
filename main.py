@@ -1,8 +1,6 @@
 
 # Imports
-import cmd
 import json
-from turtle import left
 from discord.ext import commands
 import discord
 import os
@@ -23,11 +21,10 @@ with open("configuration.json", "r") as token_json:
     token = load_token["Token"]
     prefix = load_token["command_prefix"]
 
-# Defining bot and stuff
+# Defining bot and stuff with discordpy
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
-
 
 bot = commands.Bot(command_prefix=prefix, intents=intents)
 
@@ -41,7 +38,7 @@ async def join(ctx):
         color=discord.Color.red()
     )
     Error.set_author(
-        name="KuliNet",
+        name="KuliNet - Music Function",
         icon_url=bot.user.avatar.url
     )
 
@@ -56,7 +53,7 @@ async def join(ctx):
         color=discord.Color.green()
     )
     joined.set_author(
-        name="KuliNet",
+        name="KuliNet - Music Function",
         icon_url=bot.user.avatar.url
     )
 
@@ -77,13 +74,13 @@ async def play(ctx,url):
         color=discord.Color.red()
     )
     Error.set_author(
-        name="KuliNet",
+        name="KuliNet - Music Function",
         icon_url=bot.user.avatar.url
     )
 
     if not ctx.voice_client:
         return await ctx.send(embed=Error)
-       
+    
     
     if isinstance(url, str):
        Audio_Options = {
@@ -121,12 +118,13 @@ async def leave(ctx):
         color=discord.Color.red()
     )
     left.set_author(
-        name="KuliNet",
+        name="KuliNet - Music Function",
         icon_url=bot.user.avatar.url
     )
     await ctx.send(embed=left)
     await ctx.voice_client.disconnect()
       
+
 
 
 
