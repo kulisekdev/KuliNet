@@ -125,18 +125,21 @@ async def leave(ctx):
     await ctx.send(embed=left)
     await ctx.voice_client.disconnect()
       
-@commands.has_permissions(manage_members=True)
+@commands.has_permissions(kick_members=True)
 @bot.command()
 async def kick(ctx, user:discord.Member, reason):
+    print("Init.")
     if user == bot:
-       return
+       return await ctx.send("Can't kick a bot!")
     if user == bot.user:
-       return
+       return ctx.send("Can't kick KuliNet using this command!")
     
     if reason is None:
+        print("Reason is none.")
         await user.kick(reason="No reason specified.")
         await ctx.reply(f"Successfully kicked {user} without specifing a reason")
     else:
+        print("Reason is a str")
         await user.kick(reason=reason)
         await ctx.reply(f"Successfully kicked {user} for {reason}")       
        
