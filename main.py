@@ -1,9 +1,10 @@
 
 # Imports
 import json
-from discord.ext import commands
+from discord.ext import commands, tasks
 import discord
 import os
+from ollama import embed
 import yt_dlp
 from discord import FFmpegPCMAudio
 
@@ -124,8 +125,41 @@ async def leave(ctx):
     await ctx.send(embed=left)
     await ctx.voice_client.disconnect()
       
+@commands.has_permissions(manage_members=True)
+@bot.command()
+async def kick(ctx, user:discord.Member, reason):
+    if user == bot:
+       return
+    if user == bot.user:
+       return
+    
+    if reason is None:
+        await user.kick(reason="No reason specified.")
+        await ctx.reply(f"Successfully kicked {user} without specifing a reason")
+    else:
+        await user.kick(reason=reason)
+        await ctx.reply(f"Successfully kicked {user} for {reason}")       
+       
 
 
+@kick.error
+async def kickerror(ctx,error):
+   if isinstance(error, commands.MissingPermissions):
+    Error = discord.Embed(
+        title=f"Error!",
+        description="You dont have permission to use this command!",
+        timestamp=discord.utils.utcnow(),
+        color=discord.Color.red()
+    )
+    Error.set_author(
+        name="KuliNet",
+        icon_url=bot.user.avatar.url
+    )
+    await ctx.send(embed=Error)
+      
+   
+
+    
 
 
 
