@@ -115,7 +115,7 @@ async def play(ctx,url):
 @bot.command()
 async def leave(ctx):
     left = discord.Embed(
-        title=f"Left te channel **{ctx.author.voice.channel.name}**",
+        title=f"Left channel **{ctx.author.voice.channel.name}**",
         description="The bot successfully left the voice channel.",
         timestamp=discord.utils.utcnow(),
         color=discord.Color.red()
@@ -125,7 +125,7 @@ async def leave(ctx):
         icon_url=bot.user.avatar.url
     )
     await ctx.send(embed=left)
-    await ctx.voice.channel.disconnect()
+    await ctx.voice_client.disconnect()
     
 
 
