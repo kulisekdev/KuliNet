@@ -21,6 +21,7 @@ with open("configuration.json", "r") as token_json:
     load_token = json.load(token_json)
     token = load_token["Token"]
     prefix = load_token["command_prefix"]
+    botname = load_token["botname"]
 
 # Defining bot and stuff with discordpy
 intents = discord.Intents.default()
@@ -39,7 +40,7 @@ async def join(ctx):
         color=discord.Color.red()
     )
     Error.set_author(
-        name="KuliNet - Music Function",
+        name=f"{bot.user} - Music Function",
         icon_url=bot.user.avatar.url
     )
 
@@ -54,7 +55,7 @@ async def join(ctx):
         color=discord.Color.green()
     )
     joined.set_author(
-        name="KuliNet - Music Function",
+        name=f"{bot.user} - Music Function",
         icon_url=bot.user.avatar.url
     )
 
@@ -75,7 +76,7 @@ async def play(ctx,url):
         color=discord.Color.red()
     )
     Error.set_author(
-        name="KuliNet - Music Function",
+        name=f"{bot.user} - Music Function",
         icon_url=bot.user.avatar.url
     )
 
@@ -101,7 +102,7 @@ async def play(ctx,url):
        )
 
        music.set_author(
-          name="KuliNet - Music Function",
+          name=f"{bot.user} - Music Function",
           icon_url=bot.user.avatar.url
        )
        music.set_thumbnail(
@@ -119,7 +120,7 @@ async def leave(ctx):
         color=discord.Color.red()
     )
     left.set_author(
-        name="KuliNet - Music Function",
+        name=f"{bot.user} - Music Function",
         icon_url=bot.user.avatar.url
     )
     await ctx.send(embed=left)
@@ -131,7 +132,7 @@ async def kick(ctx, user:discord.Member, reason):
     if user == bot:
        return await ctx.send("Can't kick a bot!")
     if user == bot.user:
-       return await ctx.send("Can't kick KuliNet using this command!")
+       return await ctx.send(f"Can't kick {bot.user} using this command!")
     
     await user.kick(reason=reason)
     await ctx.reply(f"Successfully kicked {user} for {reason}")       
@@ -148,7 +149,7 @@ async def kick_error(ctx,error):
         color=discord.Color.red()
         )
         Error.set_author(
-        name="KuliNet",
+        name=f"{bot.user}",
         icon_url=bot.user.avatar.url
         )
         await ctx.send(embed=Error)
@@ -163,7 +164,7 @@ async def ban(ctx, user:discord.Member, reason):
     if user == bot:
        return await ctx.send("Can't ban a bot!")
     if user == bot.user:
-       return await ctx.send("Can't ban KuliNet using this command!")
+       return await ctx.send(f"Can't ban {bot.user} using this command!")
     
     await user.kick(reason=reason)
     await ctx.reply(f"Successfully banned {user} for {reason}")    
@@ -178,12 +179,15 @@ async def ban_error(ctx,error):
         color=discord.Color.red()
         )
         Error.set_author(
-        name="KuliNet",
+        name=f"{bot.user}",
         icon_url=bot.user.avatar.url
         )
         await ctx.send(embed=Error)
      else:
         await ctx.send(f"{error}")
+
+
+
 
 
 bot.run(token=temptoken)
