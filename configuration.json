@@ -3,5 +3,7 @@
     "comment1": "enter your bot token below and the thing will take it. make sure to turn off the bot first.",
     "Token": "token here",
     "comment2": "prefix should be like ! or ? or anything.",
-    "command_prefix": "!"
+    "command_prefix": "!",
+    "comment3": "a logging channel ID where all the logging will be sent to.",
+    "LogChannelID": ""
 }
