@@ -20,7 +20,7 @@ with open("configuration.json", "r") as token_json:
     config = json.load(token_json)
     token = config["Token"]
     prefix = config["command_prefix"]
-    loggingchannel = int(config["LogChannelID"])
+    loggingchannel = config["LogChannelID"]
 
 # Defining bot and stuff with discordpy
 intents = discord.Intents.default()
