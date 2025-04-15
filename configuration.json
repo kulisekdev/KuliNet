@@ -5,5 +5,5 @@
     "comment2": "prefix should be like ! or ? or anything.",
     "command_prefix": "!",
     "comment3": "a logging channel ID where all the logging will be sent to.",
-    "LogChannelID": ""
+    "LogChannelID": null
 }
