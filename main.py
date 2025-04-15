@@ -4,8 +4,6 @@ import json
 from discord.ext import commands, tasks
 import discord
 import os
-from jax import config
-from ollama import embed
 import yt_dlp
 from discord import FFmpegPCMAudio
 
@@ -17,12 +15,11 @@ temptoken = os.getenv("token")
 
 
 
-# import discord bot token from token.json
+# import config stuff from JSON
 with open("configuration.json", "r") as token_json:
     config = json.load(token_json)
     token = config["Token"]
     prefix = config["command_prefix"]
-    botname = config["botname"]
     loggingchannel = int(config["LogChannelID"])
 
 # Defining bot and stuff with discordpy
@@ -31,7 +28,7 @@ intents.message_content = True
 intents.members = True
 
 bot = commands.Bot(command_prefix=prefix, intents=intents)
-
+logchannel = bot.get_channel(loggingchannel)
 
 @bot.command()
 async def join(ctx):
@@ -42,7 +39,7 @@ async def join(ctx):
         color=discord.Color.red()
     )
     Error.set_author(
-        name=f"{bot.user} - Music Function",
+        name=f"{bot.user}",
         icon_url=bot.user.avatar.url
     )
 
@@ -57,7 +54,7 @@ async def join(ctx):
         color=discord.Color.green()
     )
     joined.set_author(
-        name=f"{bot.user} - Music Function",
+        name=f"{bot.user}",
         icon_url=bot.user.avatar.url
     )
 
@@ -78,10 +75,19 @@ async def play(ctx,url):
         color=discord.Color.red()
     )
     Error.set_author(
-        name=f"{bot.user} - Music Function",
+        name=f"{bot.user}",
         icon_url=bot.user.avatar.url
     )
-
+    playlog = discord.Embed(
+        title=f"User {ctx.author.mention}",
+        description=f"has requested to play **{title}** \n by: **{author}**",
+        timestamp=discord.utils.utcnow(),
+        color=discord.Color.red()
+    )
+    playlog.set_author(
+        name=f"{bot.user}",
+        icon_url=bot.user.avatar.url
+    )
     if not ctx.voice_client:
         return await ctx.send(embed=Error)
     
@@ -104,13 +110,14 @@ async def play(ctx,url):
        )
 
        music.set_author(
-          name=f"{bot.user} - Music Function",
+          name=f"{bot.user}",
           icon_url=bot.user.avatar.url
        )
        music.set_thumbnail(
           url=thumbnail
        )
        await ctx.send(embed=music)
+       await loggingchannel.send(embed=playlog)
        await ctx.voice_client.play(FFmpegPCMAudio("music.webm"))
 
 @bot.command()
@@ -122,7 +129,7 @@ async def leave(ctx):
         color=discord.Color.red()
     )
     left.set_author(
-        name=f"{bot.user} - Music Function",
+        name=f"{bot.user}",
         icon_url=bot.user.avatar.url
     )
     await ctx.send(embed=left)
@@ -131,6 +138,16 @@ async def leave(ctx):
 @commands.has_permissions(kick_members=True)
 @bot.command()
 async def kick(ctx, user:discord.Member, reason):
+    kicklog = discord.Embed(
+       title=f"User Disconnected (By Force)",
+       description=f"An admin/mod {ctx.author.mention} has kicked {user} for {reason}",
+       timestamp=discord.utils.utcnow(),
+       color=discord.Color.red()
+    )
+    kicklog.set_author(
+       name=f"{bot.user}",
+       icon_url=bot.user.avatar.url
+    )
     if user == bot:
        return await ctx.send("Can't kick a bot!")
     if user == bot.user:
@@ -138,6 +155,7 @@ async def kick(ctx, user:discord.Member, reason):
     
     await user.kick(reason=reason)
     await ctx.reply(f"Successfully kicked {user} for {reason}")       
+    await loggingchannel.send(embed=kicklog)
        
 
 
@@ -163,13 +181,25 @@ async def kick_error(ctx,error):
 @commands.has_permissions(ban_members=True)
 @bot.command()
 async def ban(ctx, user:discord.Member, reason):
+    banlog = discord.Embed(
+       title=f"Ban hammer has struck!⚡",
+       description=f"An admin/mod {ctx.author.mention} has banned {user} for {reason}",
+       timestamp=discord.utils.utcnow(),
+       color=discord.Color.red()
+    )
+    banlog.set_author(
+       name=f"{bot.user}",
+       icon_url=bot.user.avatar.url
+    )
+
     if user == bot:
        return await ctx.send("Can't ban a bot!")
     if user == bot.user:
        return await ctx.send(f"Can't ban {bot.user} using this command!")
     
     await user.kick(reason=reason)
-    await ctx.reply(f"Successfully banned {user} for {reason}")    
+    await ctx.reply(f"Successfully banned {user} for {reason}")   
+    await loggingchannel.send(embed=banlog)
     
 @kick.error
 async def ban_error(ctx,error):
