@@ -4,6 +4,7 @@ import json
 from discord.ext import commands, tasks
 import discord
 import os
+from jax import config
 from ollama import embed
 import yt_dlp
 from discord import FFmpegPCMAudio
@@ -18,10 +19,11 @@ temptoken = os.getenv("token")
 
 # import discord bot token from token.json
 with open("configuration.json", "r") as token_json:
-    load_token = json.load(token_json)
-    token = load_token["Token"]
-    prefix = load_token["command_prefix"]
-    botname = load_token["botname"]
+    config = json.load(token_json)
+    token = config["Token"]
+    prefix = config["command_prefix"]
+    botname = config["botname"]
+    loggingchannel = int(config["LogChannelID"])
 
 # Defining bot and stuff with discordpy
 intents = discord.Intents.default()
